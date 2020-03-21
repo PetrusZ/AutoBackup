@@ -1,0 +1,25 @@
+# system config
+/etc/fonts/local.conf
+/etc/default/grub
+
+# systemd services
+/usr/lib/systemd/user/aria2.service
+
+# specific by machine
+/etc/kernels
+/usr/src/linux/.config
+
+# zsh
+/home/petrus/.zshrc
+/home/petrus/.antigen/antigen.zsh
+
+#vim
+/home/petrus/.vim/vimrc
+/home/petrus/.vim/vim-tiny.vim
+/home/petrus/.vim/plugin_list.vim
+/home/petrus/.vim/coc-settings.json
+/home/petrus/.vim/syntax/i3.vim
+
+#fonts
+/usr/share/fonts/taskbar.ttf
+/usr/share/fonts/Hack-Nerd
