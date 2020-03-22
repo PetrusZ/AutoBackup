@@ -9,12 +9,14 @@ source $BASE_PATH/function.sh
 function delete_old_files() {
     # reserve
     local reserve_files
-    while read line
-    do
+    if [[ -e $RESERVE_FILE ]]; then
+        while read line
+        do
 
-        local full_path="$BACKUP_DIR/$line"
-        reserve_files+="($full_path)"
-    done < $RESERVE_FILE
+            local full_path="$BACKUP_DIR/$line"
+            reserve_files+="($full_path)"
+        done < $RESERVE_FILE
+    fi
 
     local dir=$1
     for file in `ls -a $dir`       #注意此处这是两个反引号，表示运行系统命令
