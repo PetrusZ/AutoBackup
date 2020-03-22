@@ -39,7 +39,9 @@ function delete_old_files() {
 
             # 该文件不在列表中
             if [[ -z $(grep $original_path$ $CONFIG_PERMS) ]]; then
+                # 该文件不在.git/目录中，也不是RESERVE_FILE、CONFIG_PERMS、CONFIG_LIST
                 if [[ -n $(grep '.git/' $full_path) && $full_path != $RESERVE_FILE && $full_path != $CONFIG_PERMS && $full_path != $CONFIG_LIST ]]; then
+                    # 该文件不在RESERVE_FILE的列表中
                     if [[ -z $(echo "${reserve_files[@]}" | grep -w $full_path) ]]; then
                         run rm $full_path
                         # echo "rm $full_path"
