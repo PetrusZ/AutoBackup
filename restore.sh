@@ -60,7 +60,7 @@ function restore() {
         exit 1
     fi
 
-    cat $CONFIG_LIST | grep -Ev "^$|#" | while read line
+    while read line
     do
         local name=$(echo $line | awk -F '/' '{print $NF}')
         local dir=$(echo $line | sed "s/\/${name}$//g")
@@ -95,7 +95,7 @@ function restore() {
             restore_files $line $dir
             restore_perm $line
         fi
-    done
+    done < <(cat $CONFIG_LIST | grep -Ev "^$|#")
 }
 
 if [[ $# == 1 ]]; then

@@ -14,7 +14,7 @@ function delete_old_files() {
         do
             local full_path="$BACKUP_DIR/$line"
             reserve_files+="($full_path)"
-        done < $RESERVE_FILE
+        done < <(cat $RESERVE_FILE | grep -Ev "^$|#")
     fi
 
     local dir=$1
@@ -80,7 +80,7 @@ echo -n "" > $CONFIG_PERMS
 
 run rm -f $LOG_FILE
 
-cat $CONFIG_LIST | grep -Ev "^$|#" | while read line
+while read line
 do
     # 获取目录和文件名
     name=$(echo $line | awk -F '/' '{print $NF}')
@@ -99,8 +99,7 @@ do
     if [ -d $line ]; then
         stat_dir $line
     fi
-
-done
+done < <(cat $CONFIG_LIST | grep -Ev "^$|#")
 
 delete_old_files $BACKUP_DIR
 
