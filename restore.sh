@@ -1,7 +1,5 @@
 #!/bin/bash
-set -o nounset
 set -o errexit
-set -o pipefail
 
 BASE_PATH=$(cd "$(dirname "$0")"; pwd)
 source $BASE_PATH/variable.sh
