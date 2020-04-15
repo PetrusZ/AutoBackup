@@ -71,6 +71,25 @@ function stat_dir(){
     done
 }
 
+function backup() {
+    local original=$1
+    local backup=$2
+
+    uid=$(stat -c "%u" $original)
+    readable=$(stat -c "%a" $original)
+    readable=${readable:2}
+
+    if [[ $readable == 4 || $readable == 5 || $readable == 7 || $uid == 1000 ]]; then
+        run cp  -aL $original $backup
+        # echo "cp -aL $line $BACKUP_DIR/$dir"
+    else
+        run sudo cp -aL $original $backup
+        run sudo chown -R 1000:1000 $backup
+        # echo "sudo cp -aL $line $BACKUP_DIR/$dir"
+        # echo "run sudo chown -R 1000:1000 $backup"
+    fi
+}
+
 mkdir_ifnot_exist $BACKUP_DIR
 
 SAVEIFS=$IFS
@@ -88,9 +107,7 @@ do
 
     # 备份文件
     mkdir_ifnot_exist $BACKUP_DIR/$dir
-    run cp -aL $line $BACKUP_DIR/$dir
-    # echo "cp -aL $line $BACKUP_DIR/$dir"
-
+    backup $line $BACKUP_DIR/$dir
 
     # 记录权限
     perm=`stat -c "%a %u %g" $line`
