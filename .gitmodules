@@ -1,0 +1,6 @@
+[submodule "backup_desktop"]
+	path = backup_desktop
+	url = git@github.com:PetrusZ/GentooConfig.git
+[submodule "backup_dotfiles"]
+	path = backup_dotfiles
+	url = git@github.com:PetrusZ/dotfiles.git

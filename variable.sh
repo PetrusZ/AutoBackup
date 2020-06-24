@@ -2,7 +2,6 @@
 
 #VAR
 BASE_PATH=$(cd "$(dirname "$0")"; pwd)
-BACKUP_DIR="$BASE_PATH/backup"
 CONFIG_LIST="$BACKUP_DIR/list.conf"
 CONFIG_PERMS="$BACKUP_DIR/perms.conf"
 RESERVE_FILE="$BACKUP_DIR/reserve.conf"
@@ -20,5 +19,5 @@ QUIET='1'
 DEBUG=''
 
 LOG_DISABLED='1'
-LOG_FILE="${BASE_PATH}/backup.log"
+LOG_FILE="${BACKUP_DIR}.log"
 LOG_PREFIX=

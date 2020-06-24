@@ -1,13 +1,6 @@
 #!/bin/bash
 set -o errexit
 
-BASE_PATH=$(cd "$(dirname "$0")"; pwd)
-source $BASE_PATH/variable.sh
-source $BASE_PATH/function.sh
-
-old_IFS=$IFS
-IFS=$(echo -en "\n\b")
-
 function restore_perm() {
     if [[ $# != 1 ]]; then
         echo "restore_perm(): don't have enough arguments!"
@@ -96,16 +89,27 @@ function restore() {
     done < <(cat $CONFIG_LIST | grep -Ev "^$|#")
 }
 
-if [[ $# == 1 ]]; then
-    if [[ $1 == 'portage' || $1 == 'system' || $1 == 'all' ]]; then
+if [[ $# == 2 ]]; then
+    BASE_PATH=$(cd "$(dirname "$0")"; pwd)
+    BACKUP_DIR="$BASE_PATH/backup"
+    BACKUP_DIR="${BACKUP_DIR}_${1}"
+
+    source $BASE_PATH/variable.sh
+    source $BASE_PATH/function.sh
+
+    old_IFS=$IFS
+    IFS=$(echo -en "\n\b")
+
+
+    if [[ $2 == 'portage' || $2 == 'system' || $2 == 'all' ]]; then
         if [ `id -u` -ne 0 ];then
             echo "THIS COMMANDC NEED RUN AS ROOT!"
             exit 1
         fi
-        restore $1
+        restore $2
     fi
 
-    if [[ $1 == 'user' ]]; then
+    if [[ $2 == 'user' ]]; then
         if [ `id -u` -eq 0 ];then
             echo "THIS COMMAND NEED RUN AS USER!"
             exit 1
@@ -114,10 +118,10 @@ if [[ $# == 1 ]]; then
     fi
 else
     echo "Usage:"
-    echo "      $0 portage"
-    echo "      $0 system"
-    echo "      $0 user"
-    echo "      $0 all"
+    echo "      $0 backup_dir_suffix portage"
+    echo "      $0 backup_dir_suffix system"
+    echo "      $0 backup_dir_suffix user"
+    echo "      $0 backup_dir_suffix all"
 fi
 
 IFS=$old_IFS

@@ -2,10 +2,6 @@
 
 set -o errexit
 
-BASE_PATH=$(cd "$(dirname "$0")"; pwd)
-source $BASE_PATH/variable.sh
-source $BASE_PATH/function.sh
-
 function delete_old_files() {
     # reserve
     local reserve_files
@@ -90,38 +86,56 @@ function backup() {
     fi
 }
 
-mkdir_ifnot_exist $BACKUP_DIR
+function main() {
+    local backup_dir=$1
+    mkdir_ifnot_exist $backup_dir
 
-SAVEIFS=$IFS
-IFS=$(echo -en "\n\b")
+    SAVEIFS=$IFS
+    IFS=$(echo -en "\n\b")
 
-echo -n "" > $CONFIG_PERMS
+    echo -n "" > $CONFIG_PERMS
 
-run rm -f $LOG_FILE
+    run rm -f $LOG_FILE
 
-while read line
-do
-    # 获取目录和文件名
-    name=$(echo $line | awk -F '/' '{print $NF}')
-    dir=$(echo $line | sed "s/\/${name}$//g" | awk '{print substr($1,2)}')
+    while read line
+    do
+        # 获取目录和文件名
+        name=$(echo $line | awk -F '/' '{print $NF}')
+        dir=$(echo $line | sed "s/\/${name}$//g" | awk '{print substr($1,2)}')
 
-    # 备份文件
-    mkdir_ifnot_exist $BACKUP_DIR/$dir
-    backup $line $BACKUP_DIR/$dir
+        # 备份文件
+        mkdir_ifnot_exist $backup_dir/$dir
+        backup $line $backup_dir/$dir
 
-    # 记录权限
-    perm=`stat -c "%a %u %g" $line`
-    echo "$perm $line" >> $CONFIG_PERMS
+        # 记录权限
+        perm=`stat -c "%a %u %g" $line`
+        echo "$perm $line" >> $CONFIG_PERMS
 
-    if [ -d $line ]; then
-        stat_dir $line
-    fi
-done < <(cat $CONFIG_LIST | grep -Ev "^$|#")
+        if [ -d $line ]; then
+            stat_dir $line
+        fi
+    done < <(cat $CONFIG_LIST | grep -Ev "^$|#")
 
-delete_old_files $BACKUP_DIR
+    delete_old_files $backup_dir
 
 
-IFS=$SAVEIFS
+    IFS=$SAVEIFS
 
-touch $BACKUP_DIR/backup_stamp
-date > $BACKUP_DIR/backup_stamp
+    touch $backup_dir/backup_stamp
+    date > $backup_dir/backup_stamp
+}
+
+
+if [[ $# == 1 ]]; then
+    BASE_PATH=$(cd "$(dirname "$0")"; pwd)
+    BACKUP_DIR="$BASE_PATH/backup"
+    BACKUP_DIR="${BACKUP_DIR}_${1}"
+
+    source $BASE_PATH/variable.sh
+    source $BASE_PATH/function.sh
+
+    main $BACKUP_DIR
+else
+    echo "Usage:"
+    echo "      $0 backup_dir_suffix"
+fi
