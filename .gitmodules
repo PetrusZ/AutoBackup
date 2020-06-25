@@ -4,3 +4,6 @@
 [submodule "backup_dotfiles"]
 	path = backup_dotfiles
 	url = git@github.com:PetrusZ/dotfiles.git
+[submodule "backup_laptop"]
+	path = backup_laptop
+	url = git@github.com:PetrusZ/R7000Config.git
