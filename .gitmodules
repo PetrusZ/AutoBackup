@@ -7,3 +7,6 @@
 [submodule "backup_laptop"]
 	path = backup_laptop
 	url = git@github.com:PetrusZ/R7000Config.git
+[submodule "backup_deskmini"]
+	path = backup_deskmini
+	url = git@github.com:PetrusZ/DeskminiConfig.git
