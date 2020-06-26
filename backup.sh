@@ -128,8 +128,7 @@ function main() {
 
 if [[ $# == 1 ]]; then
     BASE_PATH=$(cd "$(dirname "$0")"; pwd)
-    BACKUP_DIR="$BASE_PATH/backup"
-    BACKUP_DIR="${BACKUP_DIR}_${1}"
+    BACKUP_DIR="${BASE_PATH}/backup_${1}"
 
     source $BASE_PATH/variable.sh
     source $BASE_PATH/function.sh

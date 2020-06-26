@@ -91,8 +91,7 @@ function restore() {
 
 if [[ $# == 2 ]]; then
     BASE_PATH=$(cd "$(dirname "$0")"; pwd)
-    BACKUP_DIR="$BASE_PATH/backup"
-    BACKUP_DIR="${BACKUP_DIR}_${1}"
+    BACKUP_DIR="${BASE_PATH}/backup_${1}"
 
     source $BASE_PATH/variable.sh
     source $BASE_PATH/function.sh
@@ -114,7 +113,7 @@ if [[ $# == 2 ]]; then
             echo "THIS COMMAND NEED RUN AS USER!"
             exit 1
         fi
-        restore $1
+        restore $2
     fi
 else
     echo "Usage:"
